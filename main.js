@@ -68,7 +68,7 @@ userPhone.addEventListener('input', (e) => {
 
 // [4] 폼 제출 로직 (Google Apps Script 연동)
 const consultForm = document.getElementById('consultForm');
-const GAS_URL = "https://script.google.com/macros/s/AKfycbw6_V__qxRuUYVpcRaqUJRmxfjj3MmnQXQSxq0pQhm6UfWOMy_ljdt0US7MCOlcB-Po/exec"; // 새 URL 업데이트
+const GAS_URL = "https://script.google.com/macros/s/AKfycbx9LH0Nhlr-MfEgIWePbaqimXdlBKmPyrVDfMKLgsXOXGNHm3XCiWXbf2d1lBkBk5Dd/exec"; // 현재 배포된 URL
 
 consultForm.addEventListener('submit', function (e) {
     e.preventDefault();
