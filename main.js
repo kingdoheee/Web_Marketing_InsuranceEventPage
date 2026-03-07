@@ -93,7 +93,7 @@ consultForm.addEventListener('submit', function (e) {
 
     // 제출 버튼 상태 변경
     const submitBtn = consultForm.querySelector('.submit-btn');
-    const originalBtnText = submitBtn.innerText;
+    const originalBtnText = submitBtn.innerHTML;
     submitBtn.disabled = true;
     submitBtn.innerText = "처리 중...";
 
@@ -107,8 +107,9 @@ consultForm.addEventListener('submit', function (e) {
         careTarget: document.getElementById('careTarget').value,
         phone: document.getElementById('userPhone').value,
         marketing_agree: document.getElementById('marketing_agree').checked ? '동의' : '미동의',
-        message: consultForm.querySelector('textarea[name="message"]').value,
         utm_source: document.getElementById('utm_source').value || 'direct',
+        utm_medium: document.getElementById('utm_medium').value || '',
+        utm_campaign: document.getElementById('utm_campaign').value || '',
         entry_url: window.location.href
     };
 
@@ -131,7 +132,7 @@ consultForm.addEventListener('submit', function (e) {
         })
         .finally(() => {
             submitBtn.disabled = false;
-            submitBtn.innerText = originalBtnText;
+            submitBtn.innerHTML = originalBtnText;
         });
 });
 
@@ -172,5 +173,48 @@ if (mainCta && stickyCta) {
 window.onload = function () {
     reveal();
     initUTM();
+    startCountdown();
+    initRollingList();
 };
+
+// [7] 카운트다운 타이머
+function startCountdown() {
+    const endTime = new Date();
+    endTime.setHours(23, 59, 59); // 오늘 23:59:59까지
+
+    const timer = setInterval(() => {
+        const now = new Date();
+        const diff = endTime - now;
+
+        if (diff <= 0) {
+            clearInterval(timer);
+            // 자정이 되면 다음 날로 설정
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(23, 59, 59);
+            return;
+        }
+
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        const timeBoxes = document.querySelectorAll('.time-box');
+        if (timeBoxes.length >= 3) {
+            timeBoxes[0].textContent = String(hours).padStart(2, '0');
+            timeBoxes[1].textContent = String(minutes).padStart(2, '0');
+            timeBoxes[2].textContent = String(seconds).padStart(2, '0');
+        }
+    }, 1000);
+}
+
+// [8] 실시간 상담 현황 롤링
+function initRollingList() {
+    const rollingList = document.getElementById('liveConsultations');
+    if (!rollingList) return;
+
+    // 아이템 복제하여 롤링 효과 (최소 2세트 필요)
+    const items = rollingList.innerHTML;
+    rollingList.innerHTML = items + items;
+}
 
